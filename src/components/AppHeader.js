@@ -14,7 +14,7 @@ class AppHeader extends Component {
                         </IconButton>
                         <Typography variant="h6" color="inherit">
                             Good Read Quotes
-            </Typography>
+                    </Typography>
                     </Toolbar>
                 </AppBar>
             </div>

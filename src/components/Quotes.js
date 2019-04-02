@@ -3,8 +3,9 @@ import Quote from './Quote';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getAllQuotes } from '../actions';
-import { Button, Grid, Typography } from '@material-ui/core';
-
+import { Button, Typography } from '@material-ui/core';
+import backgroundImage from '../assets/background-image/background-image.jpg';
+import { NavigateNextRounded, NavigateBeforeRounded } from '@material-ui/icons/';
 
 class Quotes extends Component {
 
@@ -71,14 +72,25 @@ class Quotes extends Component {
         }
 
         return (
-            <React.Fragment>
-                <div container="true">{renderQuotes}</div>
-                <Button variant="outlined" color="primary" onClick={this.handlePreviousPage}>
-                    Previous Page</Button>
-                <Button variant="outlined" color="primary" onClick={this.handleNextPage}>
-                    Next Page</Button>
-                <Typography>Page No : {this.state.currentPage}</Typography>
-            </React.Fragment>
+            <div>
+                {/* style={{
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+            }} */}
+                <div container style={{ "padding-bottom": "50px", "padding-top": "10px" }}>
+                    <Button variant="fab" onClick={this.handleNextPage} color="primary" mini style={{ float: "right", "margin-right": "50px", "margin-left": "30px" }}>
+                        <NavigateNextRounded />
+                    </Button>
+                    <Button variant="fab" onClick={this.handlePreviousPage} color="primary" mini style={{ float: "right" }}>
+                        <NavigateBeforeRounded />
+                    </Button>
+                    <Typography style={{ float: "right", "font-size": "16px", "margin": "10px", "alignContent": "center" }} >Page {this.state.currentPage} of {pageNumbers.length}</Typography>
+                </div>
+
+                <div container="true"  >{renderQuotes}</div>
+            </div >
         );
     }
 
