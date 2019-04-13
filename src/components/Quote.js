@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { Card, CardActionArea, Grid, Typography, IconButton } from '@material-ui/core';
+import { Card, CardActionArea, Typography } from '@material-ui/core';
+import { ThumbUpAltRounded } from '@material-ui/icons';
 import { styled } from '@material-ui/styles';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 class Quote extends Component {
+
     state = {}
     render() {
         const CardQuote = styled(Card)({
@@ -13,20 +16,30 @@ class Quote extends Component {
         });
 
         const CardQuoteFooter = styled(CardActionArea)({
-            padding: 10,
+            padding: 15,
+            display: 'inline'
         });
 
         return (
-            <CardQuote id={this.props.key}>
-                <Typography style={{ "text-align": "center", "fontSize": "20px" }}>{this.props.text}</Typography>
-                <Typography style={{ "text-align": "center", "fontSize": "16px", "margin-top": "10px", "font-weight": "bold" }}>{this.props.author.toUpperCase()}
-                </Typography>
-                <CardQuoteFooter id={this.props.key}>
-                    <Typography style={{ "fontSize": "18px", "text-align": "right" }}>{this.props.likes}
-                    </Typography>
-                </CardQuoteFooter>
-            </CardQuote>
+            <Router>
+                <React.Fragment>
+                    <CardQuote>
+                        <Typography style={{ "textAlign": "center", "fontSize": "20px" }}>{this.props.text}</Typography>
+                        <Typography style={{ "textAlign": "center", "fontSize": "16px", "marginTop": "10px", "fontWeight": "bold" }}>
+                            <Link to={`/author/${this.props.author}`}
+                                target="_blank"
+                                style={{ "textDecoration": "none" }}>{this.props.author.toUpperCase()}</Link>
+                        </Typography>
+                        <CardQuoteFooter style={{ float: "left" }}>
+                            <ThumbUpAltRounded style={{ "textAlign": "left", float: "left" }} />
+                            <Typography style={{ "fontSize": "18px", "marginLeft": "5px", "float": "left" }}>{this.props.likes_count}
+                            </Typography>
+                        </CardQuoteFooter>
+                    </CardQuote>
+                </React.Fragment>
+            </Router>
         );
+
     }
 }
 

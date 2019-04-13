@@ -2,10 +2,19 @@ import React, { Component } from 'react';
 import Quote from './Quote';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getAllQuotes } from '../actions';
-import { Button, Typography } from '@material-ui/core';
-import backgroundImage from '../assets/background-image/background-image.jpg';
-import { NavigateNextRounded, NavigateBeforeRounded } from '@material-ui/icons/';
+import { getAllQuotes, getPopularQuotes } from '../actions';
+import { Button, Typography, Menu, MenuItem, Divider, Fab } from '@material-ui/core';
+import backgroundImage from '../assets/background-image/background-image-main.jpg';
+import {
+    NavigateNextRounded,
+    NavigateBeforeRounded,
+    Sort,
+    WhatshotRounded,
+    ShowChartRounded,
+    ShuffleRounded
+} from '@material-ui/icons/';
+import { SORT_POPULAR, SORT_TRENDING, SORT_RANDOM } from '../constants/ActionTypes';
+
 
 class Quotes extends Component {
 
@@ -14,9 +23,33 @@ class Quotes extends Component {
         this.state = {
             currentPage: 1,
             quotesPerPage: 16,
+            anchorEl: null,
         }
         this.handleNextPage = this.handleNextPage.bind(this);
         this.handlePreviousPage = this.handlePreviousPage.bind(this);
+        this.handleMenuClick = this.handleMenuClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+    }
+
+    handleMenuClick(event) {
+        this.setState({ anchorEl: event.currentTarget });
+    }
+
+    handleClose(type) {
+        switch (type) {
+            case SORT_POPULAR:
+                this.props.getPopularQuotes();
+                break;
+            case SORT_TRENDING:
+                this.props.getAllQuotes();
+                break;
+            case SORT_RANDOM:
+                console.log("PLACE HOLDER");
+                break;
+            default:
+                break;
+        }
+        this.setState({ anchorEl: null });
     }
 
     handleNextPage() {
@@ -39,12 +72,13 @@ class Quotes extends Component {
     }
 
     componentWillMount() {
-
         this.props.getAllQuotes();
-
     }
 
     render() {
+
+        //For SortMenu Click
+        const { anchorEl } = this.state;
 
         //console.log(this.props.quotes);
         const all_quotes = this.props.quotes;
@@ -58,10 +92,9 @@ class Quotes extends Component {
         //console.log(`currentPageQuotes : ${currentPageQuotes}`);
 
         const renderQuotes =
-            currentPageQuotes.map(item => {
-
+            currentPageQuotes.map((item, index) => {
                 return (
-                    <Quote key={Math.random()} likes={item.likes} author={item.author} text={item.text} />
+                    <Quote key={index} likes_count={item.likes_count} author={item.author} text={item.text}/>
                 )
             });
 
@@ -72,25 +105,69 @@ class Quotes extends Component {
         }
 
         return (
-            <div>
-                {/* style={{
+            <div style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundPosition: 'center',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
-            }} */}
-                <div container style={{ "padding-bottom": "50px", "padding-top": "10px" }}>
-                    <Button variant="fab" onClick={this.handleNextPage} color="primary" mini style={{ float: "right", "margin-right": "50px", "margin-left": "30px" }}>
+            }}>
+                <div style={{ "paddingBottom": "50px", "paddingTop": "10px" }}>
+                    <Fab
+                        size="small"
+                        onClick={this.handleNextPage}
+                        color="primary"
+                        style={{
+                            float: "right",
+                            "marginRight": "50px",
+                            "marginLeft": "30px"
+                        }}>
                         <NavigateNextRounded />
-                    </Button>
-                    <Button variant="fab" onClick={this.handlePreviousPage} color="primary" mini style={{ float: "right" }}>
+                    </Fab>
+                    <Fab
+                        size="small"
+                        onClick={this.handlePreviousPage}
+                        color="primary"
+                        style={{ float: "right" }}>
                         <NavigateBeforeRounded />
+                    </Fab>
+                    <Typography style={{
+                        float: "right",
+                        "fontSize": "16px",
+                        "margin": "10px",
+                        "alignContent": "center"
+                    }} >Page {this.state.currentPage} of {pageNumbers.length}</Typography>
+                    <Button color="primary"
+                        variant="outlined"
+                        mini
+                        aria-owns={anchorEl ? "simple-menu" : undefined}
+                        aria-haspopup="true"
+                        style={{ float: "right", "marginRight": "2px" }}
+                        onClick={this.handleMenuClick}>
+                        <Typography style={{ "marginRight": "5px" }}>Sort</Typography>
+                        <Sort />
                     </Button>
-                    <Typography style={{ float: "right", "font-size": "16px", "margin": "10px", "alignContent": "center" }} >Page {this.state.currentPage} of {pageNumbers.length}</Typography>
+                    <Menu
+                        id="simple-menu"
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={this.handleClose}
+                        style={{ "fontSize": "16px" }}>
+                        <MenuItem onClick={() => { this.handleClose(SORT_POPULAR) }} >
+                            <WhatshotRounded style={{ "marginRight": "5px" }} />
+                            <Typography>Popular</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={() => { this.handleClose(SORT_TRENDING) }} >
+                            <ShowChartRounded style={{ "marginRight": "5px" }} />
+                            <Typography>Trending</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={() => { this.handleClose(SORT_RANDOM) }}>
+                            <ShuffleRounded style={{ "marginRight": "5px" }} />
+                            <Typography>Random</Typography>
+                        </MenuItem>
+                    </Menu>
                 </div>
-
-                <div container="true"  >{renderQuotes}</div>
-            </div >
+                <div container="true">{renderQuotes}</div>
+            </div>
         );
     }
 
@@ -98,6 +175,7 @@ class Quotes extends Component {
 
 Quotes.propTypes = {
     getAllQuotes: PropTypes.func.isRequired,
+    sortPopularQuotes: PropTypes.func,
     quotes: PropTypes.array.isRequired
 }
 
@@ -105,4 +183,4 @@ const mapStateToProps = state => ({
     quotes: state.quotes.quotes
 })
 
-export default connect(mapStateToProps, { getAllQuotes })(Quotes);
+export default connect(mapStateToProps, { getAllQuotes, getPopularQuotes })(Quotes);

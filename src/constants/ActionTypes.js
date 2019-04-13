@@ -1,1 +1,5 @@
 export const GET_QUOTES = 'GET_QUOTES'
+export const SORT_POPULAR = 'SORT_POPULAR'
+export const SORT_TRENDING = 'SORT_TRENDING'
+export const SORT_RANDOM = 'SORT_RANDOM'
+export const AUTHOR_QUOTES = 'AUTHOR_QUOTES' 
