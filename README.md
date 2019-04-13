@@ -1,3 +1,27 @@
+﻿# GoodReactQuotes
+
+Web Application built on React + Redux. 
+
+  - Implemented features like Pagination, State Management, React Routing etc
+  - React Materail UI for components
+
+# Features!
+
+  - Sort Quotes by Popularity, Latest, Random filtering.
+  - Search Quotes by Author
+
+### Todos
+
+ - App Drawer to display MyQuotes, BookMarkedQuotes.
+ - JWT Authentication
+ - Adding a quote via MyQuotes and using Unsplash API to generate custom background for quote.
+ - OpenAuthentication via Google, Facebook.
+
+License
+----
+
+MIT
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
